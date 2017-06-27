@@ -12,4 +12,3 @@
 + Bootstrap简单搭建页面
 + bower进行依赖管理
   <pre><code>bower install</pre></code>
-+ 前端页面采用Vue.js部署数据，Bootstrap架形。npm管理后台依赖，bower管理前台依赖。欢迎交流...
