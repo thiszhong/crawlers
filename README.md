@@ -8,7 +8,7 @@
   <pre><code>npm install</pre></code>
 
 ## 前端
-+ Vue.js进行部署及数据绑定
++ Vue.js进行部署及数据绑定，axios前后数据交换
 + Bootstrap简单搭建页面
 + bower进行依赖管理
   <pre><code>bower install</pre></code>
