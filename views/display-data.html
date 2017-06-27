@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test for Crawler on Nodejs</title>
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="/jquery/jquery.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid bg-primary">
+        <h1>简单爬虫测试</h1>
+        <p class="lead" style="text-indent: 2em;">本站是个人出于兴趣，用Node.js对CNodejs中文社区网站首页（http://cnodejs.org/）的版区信息进行实时抓取，然后重新展示于该页面。前端页面采用Vue.js部署数据，Bootstrap架形。npm管理后台依赖，bower管理前台依赖。欢迎交流...</p>
+    </div>
+    <div id="myVm" class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <table class="table">
+                    <tbody>
+                        <tr class="" v-bind:class="{'bg-success':isSuccess,'bg-danger':ing}">
+                            <th class="col-md-1" colspan="3">{{message}}</th>
+                        </tr>
+                        <tr>
+                            <th class="col-md-1 text-center">发布者</th>
+                            <th class="col-md-9">标题</th>
+                            <th class="col-md-2 text-right">最新回复</th>
+                        </tr>
+                        <!--v-for='item in items'，因数据嵌套复杂，这里投机了，因为知道总数是40条-->
+                        <tr v-for="n in 40">
+                            <td class="col-md-1 text-center"><a v-bind:href="authorLink[n-1]"><img v-bind:src="authorPic[n-1]" alt="" width="30px" height="30px"></a></td>
+                            <td class="col-md-9" style="vertical-align: middle;"><a v-bind:href="titleLink[n-1]">{{titleCont[n-1]}}</a></td>
+                            <td class="col-md-2 text-right">{{replyTime[n-1]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--<div class="col-md-1"> </div>-->
+            <div class="col-md-2 col-md-offset-1 bg-primary">
+                <p> </p>
+                <address>
+                    <strong>代码：Github：</strong><br>
+                    <a href="https://github.com/XueAi/crawlers" target="_blank" style="color: #fff;">github.com/XueAi/crawlers</a>
+                </address>
+                <address>
+                    如有任何侵犯，请告知整改：<a href="mailto:#" style="color: #fff;">384232149@qq.com</a>
+                </address>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // 实例一个Vue
+    var vm = new Vue({
+        el : '#myVm',
+        data : {
+            isSuccess :false,
+            ing : true,
+            message : '抓取中......',
+            authorLink : [],
+            authorPic : [],
+            titleLink : [],
+            titleCont : [],
+            replyTime : []
+        },
+        mounted : function () {
+            var that = this;
+            axios.get('/getData')
+                .then(function (res) {
+                    // 整个转存然后data.authorLink[n-1]渲染，也可以正常显示数据。
+                    // 但浏览器会console一个Vue错误，未能解决，所以挨个转存了。
+                    that.authorLink = res.data.authorLink;
+                    that.authorPic = res.data.authorPic;
+                    that.titleLink = res.data.titleLink;
+                    that.titleCont = res.data.titleCont;
+                    that.replyTime = res.data.replyTime;
+                    that.message = '抓取完成';
+                    that.ing = false;
+                    that.isSuccess = true;
+                })
+                .catch(function (err) {
+                    console.log(err);
+                })
+        }
+    })
+</script>
+</html>
